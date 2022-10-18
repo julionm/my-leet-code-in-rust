@@ -5,6 +5,47 @@ fn main () {
 
 }
 
+fn find_median_sorted_arrays(mut nums1: Vec<i32>, mut nums2: Vec<i32>) -> f64 {
+    // join both arrays, if I'm not wrong the iter has some property to do this
+    let median_position: f64 = ((nums1.len() as f64 + nums2.len() as f64) / 2.0).floor();
+
+
+    let mut arr1 = &nums1[..];
+    let mut arr2 = &nums2[..];
+    
+    if (arr1.len() + arr2.len() % 2) == 0 { // it's even
+        // sum the median_position and median_position + 1
+        let biggest_len = if nums1.len() > nums2.len() { nums1.len() } else { nums2.len() };
+        
+        let mut res_vec: Vec<i32> = Vec::new();
+        
+        for i in 0..biggest_len+1 {
+
+            // ! INDEX OUT OF BOUNDS
+
+            if arr1[0] < arr2[0] {
+                res_vec.push(arr1[0]);
+                
+                arr1 = &arr1[1..];
+                
+            } else {
+                res_vec.push(arr2[0]);
+                
+                arr2 = &arr2[1..];
+            }
+        }
+        
+        // res_vec[res_vec.len() - 1] + res_vec[res_vec.len() - 2]
+
+        2.0
+        
+    } else { // it's odd
+        
+        
+        1.0
+    }
+}
+
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
   pub val: i32,
