@@ -1,48 +1,59 @@
 use std::clone::Clone;
-use std::collections::{HashMap, HashSet};
 
 fn main () {
-
+    
 }
 
-fn find_median_sorted_arrays(mut nums1: Vec<i32>, mut nums2: Vec<i32>) -> f64 {
-    // join both arrays, if I'm not wrong the iter has some property to do this
-    let median_position: f64 = ((nums1.len() as f64 + nums2.len() as f64) / 2.0).floor();
+fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
+    let total_nums = nums1.len() + nums2.len();
+    let median_position = ((total_nums as f64 / 2.0).ceil()) as usize;
 
+    if nums1.len() == 0 {
+        if total_nums % 2 == 0 {
+            return (nums2[median_position] + nums2[median_position - 1]) as f64 / 2.0    
+        } else {
+            return nums2[median_position - 1] as f64
+        }
+    } else if nums2.len() == 0 {
+        if total_nums % 2 == 0 {
+            return (nums1[median_position] + nums1[median_position - 1]) as f64 / 2.0    
+        } else {
+            return nums1[median_position - 1] as f64
+        }
+    }
 
     let mut arr1 = &nums1[..];
     let mut arr2 = &nums2[..];
-    
-    if (arr1.len() + arr2.len() % 2) == 0 { // it's even
-        // sum the median_position and median_position + 1
-        let biggest_len = if nums1.len() > nums2.len() { nums1.len() } else { nums2.len() };
-        
-        let mut res_vec: Vec<i32> = Vec::new();
-        
-        for i in 0..biggest_len+1 {
 
-            // ! INDEX OUT OF BOUNDS
+    let mut res: Vec<i32> = Vec::new();
 
-            if arr1[0] < arr2[0] {
-                res_vec.push(arr1[0]);
-                
+    for _ in 0..median_position + 1 {
+        if arr1[0] < arr2[0] {
+            res.push(arr1[0]);
+
+            if arr1.len() > 1 {
                 arr1 = &arr1[1..];
-                
             } else {
-                res_vec.push(arr2[0]);
-                
-                arr2 = &arr2[1..];
+                res.append(&mut arr2.to_vec());
+                break;
             }
-        }
-        
-        // res_vec[res_vec.len() - 1] + res_vec[res_vec.len() - 2]
 
-        2.0
-        
-    } else { // it's odd
-        
-        
-        1.0
+        } else {
+            res.push(arr2[0]);
+
+            if arr2.len() > 1 {
+                arr2 = &arr2[1..];
+            } else {
+                res.append(&mut arr1.to_vec());
+                break;
+            }
+        }  
+    }
+
+    if total_nums % 2 == 0 {
+        (res[median_position] + res[median_position - 1]) as f64 / 2.0    
+    } else {
+        res[median_position - 1] as f64
     }
 }
 
