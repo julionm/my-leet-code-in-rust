@@ -1,7 +1,69 @@
-use std::clone::Clone;
+use std::{clone::Clone, ops::Neg};
 
 fn main () {
-    
+    let a = String::from("-91283472332");
+    println!("{}", my_atoi(a));
+}
+
+fn my_atoi(s: String) -> i32 {
+    let trimmed_s = s.trim();
+    let is_negative = trimmed_s.starts_with('-');
+    let mut iter_over_s = trimmed_s.chars();
+    let mut number_in_string = String::new();
+
+    if is_negative || trimmed_s.starts_with('+') {
+        iter_over_s.next();
+    }
+
+    for c in iter_over_s {
+        if c.is_numeric() {
+            number_in_string.push(c);
+        } else {
+            break;
+        }
+    }
+
+    match number_in_string.parse::<i32>() {
+        Ok(v) => if is_negative { -v } else { v },
+        Err(err) => {
+            if err.to_string().starts_with("number too large") {
+                if is_negative {
+                    i32::MIN
+                } else {
+                    i32::MAX
+                }
+            } else {
+                0
+            }
+        }
+    }
+}
+
+fn reverse_integer(mut x: i32) -> i32 {
+    let is_negative = x.is_negative();
+
+    x = x.abs();
+
+    let mut res = 0;
+
+    while x > 0 {
+        let pop = x % 10;
+
+        if res > i32::MAX/10 || res < i32::MIN/10 {
+            return 0;
+        }
+
+        res *= 10;
+        res += pop;
+        
+        x = (x - pop) / 10;
+    }
+
+    if is_negative {
+        -res
+    } else {
+        res
+    }
 }
 
 fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
